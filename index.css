@@ -1,0 +1,22 @@
+body {
+  background-color: #273c75;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  text-align: center;
+}
+
+.file-input {
+  height: 100px;
+  width: 100%;
+  background-color: #ccc;
+  border: 1px solid #000;
+  color: #000;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

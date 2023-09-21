@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'" />
+    <title>envCryptor</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <h1>envCryptor</h1>
+    <div class="form-wrapper">
+      <input id="select-file" type="file" accept=".env,.env.encrypted" />
+      <form class="form" id="form">
+        <div class="label-input">
+          <label for="project-name">Projeto</label>
+          <input
+            type="text"
+            id="project-name"
+            name="project-name"
+            disabled
+            required
+            placeholder="Nome do Projeto"
+          />
+        </div>
+        <div class="label-input">
+          <label for="last-modified">Última Modificação</label>
+          <input type="datetime-local" id="last-modified" name="last-modified" readonly disabled />
+        </div>
+        <div class="label-input">
+          <label for="version">Versão</label>
+          <input
+            type="text"
+            id="version"
+            name="version"
+            disabled
+            required
+            placeholder="Versão do Projeto"
+          />
+        </div>
+        <div class="label-input">
+          <label for="modified-by">Modificado por</label>
+          <input
+            type="text"
+            id="modified-by"
+            name="modified-by"
+            disabled
+            required
+            placeholder="Nome do último a modificar o arquivo"
+          />
+        </div>
+        <button type="submit" id="action-button" disabled>Selecione um Arquivo</button>
+      </form>
+    </div>
+  </body>
+  <script src="./renderer.js"></script>
+</html>

@@ -1,1 +1,35 @@
-/node_modules
+# Logs
+logs/
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+_build/
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+dist/
+build/
+package-lock.json
+
+
+
+
+out/

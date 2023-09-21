@@ -1,15 +1,16 @@
 {
   "name": "envcryptor",
   "version": "1.0.0",
-  "description": "Programa para criptografar e descriptografar arquivos .env para facilitar o compartilhamento desses arquivos.",
+  "description": "Criptografia e descriptografia de arquivos .env",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron src/main.js"
   },
   "author": "Gustavo Fonseca",
   "license": "ISC",
   "devDependencies": {
     "electron": "^26.2.1",
-    "electron-reloader": "^1.2.3"
+    "electron-reloader": "^1.2.3",
+    "eslint": "^8.49.0"
   }
 }

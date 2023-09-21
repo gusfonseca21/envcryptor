@@ -1,5 +1,5 @@
 body {
-  max-height: 100vh;
+  height: 100vh;
   background-color: #273c75;
   font-family: 'Courier New', Courier, monospace;
   display: flex;
@@ -13,16 +13,18 @@ body {
 
 body h1 {
   margin: 0;
+  position: absolute;
+  top: 1%;
 }
 
 .form-wrapper {
   height: 100%;
   width: 100%;
   display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 2rem;
 }
 
 .form {
@@ -30,7 +32,8 @@ body h1 {
   flex-direction: row;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1rem;
+  position: relative;
 }
 
 .label-input {
@@ -38,4 +41,15 @@ body h1 {
   flex-direction: column;
   align-items: start;
   gap: 0.5rem;
+}
+
+.file {
+  align-items: center;
+}
+
+.action-button {
+  position: absolute;
+  bottom: -150%;
+  height: 3rem;
+  width: 10rem;
 }

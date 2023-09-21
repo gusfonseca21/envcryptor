@@ -10,7 +10,12 @@
   <body>
     <h1>envCryptor</h1>
     <div class="form-wrapper">
-      <input id="select-file" type="file" accept=".env,.env.encrypted" />
+      <div class="label-input file">
+        <input id="select-file" name="select-file" type="file" accept=".env,.env.encrypted" />
+        <label for="select-file"
+          >Apenas arquivos com extensões .env ou .env.encrypted são permitidos</label
+        >
+      </div>
       <form class="form" id="form">
         <div class="label-input">
           <label for="project-name">Projeto</label>
@@ -21,6 +26,7 @@
             disabled
             required
             placeholder="Nome do Projeto"
+            maxlength="30"
           />
         </div>
         <div class="label-input">
@@ -36,6 +42,7 @@
             disabled
             required
             placeholder="Versão do Projeto"
+            maxlength="10"
           />
         </div>
         <div class="label-input">
@@ -47,9 +54,12 @@
             disabled
             required
             placeholder="Nome do último a modificar o arquivo"
+            maxlength="30"
           />
         </div>
-        <button type="submit" id="action-button" disabled>Selecione um Arquivo</button>
+        <button type="submit" id="action-button" class="action-button" disabled>
+          Selecione um Arquivo
+        </button>
       </form>
     </div>
   </body>

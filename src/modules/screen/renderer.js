@@ -1,3 +1,5 @@
+let currentSubmitHandler = null;
+
 const fileInputEl = document.getElementById('select-file');
 const actionButtonEl = document.getElementById('action-button');
 const projectNameInputEl = document.getElementById('project-name');
@@ -15,26 +17,19 @@ function loadFile(file) {
   const splittedPath = file.path.split('.');
 
   reader.onload = function (event) {
-    enableInputs();
     const initialTxtContent = event.target.result;
     const splittedInitialTxtContent = initialTxtContent.split('\n');
-    if (splittedPath.length === 2) {
-      // SE A EXTENSÃO DO ARQUIVO FOR APENAS .ENV
+    if (splittedPath.length === 2 && splittedPath[1] === 'env') {
+      enableInputs();
+      modifiedDateInputEl.disabled = true;
       const pattern = /^# Projeto:/;
       if (!pattern.test(splittedInitialTxtContent[0])) {
         // SE O ARQUIVO AINDA NÃO TIVER SIDO CRIPTOGRAFADO
-        formEl.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const newFileTxtContent = generateNewTxtContent(
-            projectNameInputEl.value,
-            getTodayDateString(),
-            versionInputEl.value,
-            modifiedByInputEl.value,
-            initialTxtContent,
-          );
-          window.envFile.sendToEncrypt(newFileTxtContent, splittedPath[0]);
-          setInitialElValues();
-        });
+        formEl.removeEventListener('submit', currentSubmitHandler);
+        currentSubmitHandler = function (e) {
+          handleEncryptSubmit(e, initialTxtContent, splittedPath[0]);
+        };
+        formEl.addEventListener('submit', currentSubmitHandler);
       } else {
         // SE O ARQUIVO JÁ FOI CRIPTOGRAFADO
         const fileData = splittedInitialTxtContent
@@ -47,32 +42,46 @@ function loadFile(file) {
           });
         setInputValues(fileData);
         const envVariables = splittedInitialTxtContent.filter((_, index) => index >= 7).join('\n');
-        formEl.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const newFileTxtContent = generateNewTxtContent(
-            projectNameInputEl.value,
-            getTodayDateString(),
-            versionInputEl.value,
-            modifiedByInputEl.value,
-            envVariables,
-          );
-          window.envFile.sendToEncrypt(newFileTxtContent, splittedPath[0]);
-          setInitialElValues();
-        });
+        formEl.removeEventListener('submit', currentSubmitHandler);
+        currentSubmitHandler = function (e) {
+          handleEncryptSubmit(e, envVariables, splittedPath[0]);
+        };
+        formEl.addEventListener('submit', currentSubmitHandler);
       }
       actionButtonEl.innerText = 'Criptografar';
-    } else if (splittedPath.length === 3) {
-      // CONTINUAR AQUI
-      formEl.addEventListener('submit', (e) => {
-        e.preventDefault();
-        window.envFile.sendToDecrypt(initialTxtContent, splittedPath[0]);
-        setInitialElValues();
-      });
+    } else if (splittedPath.length === 3 && splittedPath[2] === 'encrypted') {
+      // SE O ARQUIVO ESTIVER CRIPTOGRAFADO
+      setInitialElValues('fileInput');
+      actionButtonEl.disabled = false;
+      formEl.removeEventListener('submit', currentSubmitHandler);
+      currentSubmitHandler = function (e) {
+        handleDecryptSubmit(e, initialTxtContent, splittedPath[0]);
+      };
+      formEl.addEventListener('submit', currentSubmitHandler);
       actionButtonEl.innerText = 'Descriptografar';
     }
   };
 
   reader.readAsText(file);
+}
+
+function handleEncryptSubmit(e, txtContent, path) {
+  e.preventDefault();
+  const newFileTxtContent = generateNewTxtContent(
+    projectNameInputEl.value,
+    getTodayDateString(),
+    versionInputEl.value,
+    modifiedByInputEl.value,
+    txtContent,
+  );
+  window.envFile.sendToEncrypt(newFileTxtContent, path);
+  setInitialElValues();
+}
+
+function handleDecryptSubmit(e, txtContent, path) {
+  e.preventDefault();
+  window.envFile.sendToDecrypt(txtContent, path);
+  setInitialElValues();
 }
 
 function generateNewTxtContent(project, date, version, modifiedBy, variables) {
@@ -104,18 +113,21 @@ function setInputValues(fileDataArr) {
   modifiedDateInputEl.value = formattedDate;
 }
 
-function setInitialElValues() {
-  fileInputEl.value = '';
+function setInitialElValues(ignoreInput) {
+  projectNameInputEl.value = '';
+  versionInputEl.value = '';
+  modifiedByInputEl.value = '';
   actionButtonEl.innerText = 'Selecione um Arquivo';
   actionButtonEl.disabled = true;
-  projectNameInputEl.value = '';
   projectNameInputEl.disabled = true;
   modifiedDateInputEl.value = null;
-  versionInputEl.value = '';
   versionInputEl.disabled = true;
   modifiedByInputEl.disabled = true;
-  modifiedByInputEl.value = '';
   modifiedDateInputEl.disabled = true;
+
+  if (ignoreInput === undefined) {
+    fileInputEl.value = null;
+  }
 }
 
 function enableInputs() {

@@ -7,10 +7,16 @@ const modifiedDateInputEl = document.getElementById('last-modified');
 const formEl = document.getElementById('form');
 const versionInputEl = document.getElementById('version');
 const modifiedByInputEl = document.getElementById('modified-by');
+const keyInputEl = document.getElementById('encryption-key');
 
 fileInputEl.addEventListener('click', () => (this.value = null));
-fileInputEl.addEventListener('close', () => (this.value = null));
-fileInputEl.addEventListener('change', () => loadFile(fileInputEl.files[0]));
+fileInputEl.addEventListener('change', (e) => {
+  if (!e.target.value.length) {
+    setInitialElValues();
+    return;
+  }
+  loadFile(fileInputEl.files[0]);
+});
 
 function loadFile(file) {
   const reader = new FileReader();
@@ -74,13 +80,13 @@ function handleEncryptSubmit(e, txtContent, path) {
     modifiedByInputEl.value,
     txtContent,
   );
-  window.envFile.sendToEncrypt(newFileTxtContent, path);
+  window.envFile.sendToEncrypt(newFileTxtContent, path, keyInputEl.value);
   setInitialElValues();
 }
 
 function handleDecryptSubmit(e, txtContent, path) {
   e.preventDefault();
-  window.envFile.sendToDecrypt(txtContent, path);
+  window.envFile.sendToDecrypt(txtContent, path, keyInputEl.value);
   setInitialElValues();
 }
 
@@ -124,6 +130,8 @@ function setInitialElValues(ignoreInput) {
   versionInputEl.disabled = true;
   modifiedByInputEl.disabled = true;
   modifiedDateInputEl.disabled = true;
+  keyInputEl.value = '';
+  keyInputEl.disabled = true;
 
   if (ignoreInput === undefined) {
     fileInputEl.value = null;
@@ -136,4 +144,5 @@ function enableInputs() {
   versionInputEl.disabled = false;
   modifiedByInputEl.disabled = false;
   modifiedDateInputEl.disabled = false;
+  keyInputEl.disabled = false;
 }
